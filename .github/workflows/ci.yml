@@ -29,6 +29,9 @@ jobs:
       with:
         python-version: '3.11'
     
+    - name: List files (debug)
+      run: ls -la
+      
     - name: Install pika
       run: pip install pika
     
@@ -37,4 +40,4 @@ jobs:
         timeout 30s bash -c 'until nc -z localhost 5672; do sleep 1; done'
     
     - name: Run test
-      run: python primeiro_teste.py
+      run: python primeiro_test.py  # ← Corrigido!
