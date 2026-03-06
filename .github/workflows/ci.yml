@@ -15,12 +15,19 @@ jobs:
         image: rabbitmq:3.12-management
         ports:
           - 5672:5672
+        options: >-
+          --health-cmd "rabbitmq-diagnostics ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
     - uses: actions/checkout@v4
-    - uses: actions/setup-python@v5
+    
+    - name: Setup Python 3.13
+      uses: actions/setup-python@v5
       with:
-        python-version: '3.11'
+        python-version: '3.13'
     
     - name: Install pika
       run: pip install pika
@@ -29,5 +36,4 @@ jobs:
       run: timeout 30s bash -c 'until nc -z localhost 5672; do sleep 1; done'
     
     - name: Run test
-      working-directory: ./Projeto Rabbit
       run: python primeiro_test.py
