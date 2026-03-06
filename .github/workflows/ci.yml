@@ -1,0 +1,40 @@
+name: CI - RabbitMQ Python
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    services:
+      rabbitmq:
+        image: rabbitmq:3.12-management
+        ports:
+          - 5672:5672
+        options: >-
+          --health-cmd "rabbitmq-diagnostics ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    
+    - name: Install pika
+      run: pip install pika
+    
+    - name: Wait for RabbitMQ
+      run: |
+        timeout 30s bash -c 'until nc -z localhost 5672; do sleep 1; done'
+    
+    - name: Run test
+      run: python primeiro_teste.py
