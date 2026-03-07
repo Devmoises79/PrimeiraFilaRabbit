@@ -35,12 +35,7 @@ jobs:
     - name: Wait for RabbitMQ
       run: |
         timeout 30s bash -c 'until nc -z localhost 5672; do sleep 1; done'
-        echo " RabbitMQ pronto"
-    
-    - name: Debug - List files
-      run: |
-        echo " Arquivos em .github/workflows:"
-        ls -la .github/workflows/
+        echo "✅ RabbitMQ pronto"
     
     - name: Run test
-      run: python .github/workflows/primeira_fila.py
+      run: python primeira_fila.py  
