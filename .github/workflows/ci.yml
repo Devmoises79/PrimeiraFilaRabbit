@@ -33,7 +33,9 @@ jobs:
       run: pip install pika
     
     - name: Wait for RabbitMQ
-      run: timeout 30s bash -c 'until nc -z localhost 5672; do sleep 1; done'
+      run: |
+        timeout 30s bash -c 'until nc -z localhost 5672; do sleep 1; done'
+        echo "RabbitMQ pronto"
     
     - name: Run test
-      run: python primeiro_test.py
+      run: python .github/primeira_fila.py
